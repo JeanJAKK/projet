@@ -1,0 +1,30 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package cli;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @author jakk
+ */
+public class CmQuitter  extends Commande{
+
+    @Override
+    public void executer() {
+        Scanner clavier = new Scanner(System.in);
+        System.out.println("Quitter le programme?[o/N]");
+        String reponse = clavier.next().toUpperCase();
+        if(reponse.equals("O")){
+            System.out.println("Au revoir!!!");
+            System.exit(0); 
+        }  
+    }
+
+    @Override
+    public void setParametres(String[] parametres) {
+    }
+    
+}
