@@ -27,5 +27,8 @@ public class CmEtudiantCreer extends Commande{
     @Override
     public void setParametres(String[] parametres) {
         this.numeroCarte = Integer.parseInt(parametres[0]);
+        this.nom = parametres[1];
+        this.prenom = parametres[2];
+//        this.dateNaissance = LocalDate.parse(parametres[3]);
     }
 }

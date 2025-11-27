@@ -37,6 +37,12 @@ public class ParseurCommande {
            case "ETUDIANT-CREER":
                commande = new CmEtudiantCreer();
                break;
+           case "ETUDIANT-MODIFIER":
+               commande = new CmEtudiantModifier();
+               break;
+           case "ETUDIANT-SUPPRIMER":
+               commande = new CmEtudiantSupprimer();
+               break;
            default :
                commande = new CmInconnue();
        }

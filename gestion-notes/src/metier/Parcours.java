@@ -22,30 +22,29 @@ public class Parcours {
     
     public Parcours() {
          liste.add(this);
+         sequence = sequence + 1;  
     }
     
     public Parcours(String libelle){
-        this(sequence, libelle);
-        sequence = sequence + 1;   
+        this(sequence, libelle);    
     }
     
-    public Parcours(int id, String libelle) {
+    public Parcours(int sequence, String libelle) {
         this();
-        this.id = id;
+        this.id = sequence;
         this.libelle = libelle;
         
     }
     
     public static String getHeader(){
-        return "N° \t Identifiant \t Libelle";
+        return "Identifiant \t Libelle";
     }
     
     public static void afficherTout(){
-        int i = 1;
         System.out.println(getHeader());
         for(Parcours p : liste){
-            System.out.println(i + "\t" + p);
-            i++;
+            System.out.println(p);
+
         }
         
     }
@@ -61,7 +60,7 @@ public class Parcours {
         int i = 1;
         System.out.println(Etudiant.getHeader());
         for(Etudiant etudiant : this.etudiants){
-            System.out.println(i + "\t" + etudiant);
+            System.out.println( etudiant);
             i++;
         }
     }
@@ -83,6 +82,10 @@ public class Parcours {
     }
     public void setEtudiants(List<Etudiant> etudiants) {
         this.etudiants = etudiants;
+    }
+    
+    public int getId(){
+        return this.id;
     }
     
     public List<Etablissement> getEtablissements (){

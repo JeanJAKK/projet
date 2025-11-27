@@ -29,6 +29,25 @@ public class Etudiant {
     public Etudiant(){
         liste.add(this);
     }
+    
+    public static boolean supprimerEtudiant(int numeroCarte) {
+         return liste.removeIf(etd -> etd.getNumeroCarte() == numeroCarte);
+    }
+    
+    public static Etudiant modifierEtudiant(int numeroCarte) {
+    for (Etudiant e : liste) {
+        if (e.getNumeroCarte() == numeroCarte) {
+            return e;
+        }
+    }
+    return null;
+}
+
+
+    
+//    public Etudiant(int numeroCarte){
+//        
+//    }
    
     public Etudiant(String nom, String prenom, LocalDate dateNaissance, int numeroCarte) {
         this.nom = nom;

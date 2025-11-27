@@ -6,18 +6,29 @@ package cli;
 
 import metier.Parcours;
 
+
 /**
  *
  * @author jakk
  */
 public class CmParcoursAfficher extends Commande{
+    int id;
     @Override
     public void executer() {
-        Parcours.afficherTout();
+//        Parcours.afficherTout();
+        try {
+            for(Parcours p : Parcours.getListe()){
+                if(this.id == p.getId()){
+                    p.afficher();
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     @Override
     public void setParametres(String[] parametres) {
+        this.id = Integer.parseInt(parametres[0]);
     }
     
 }

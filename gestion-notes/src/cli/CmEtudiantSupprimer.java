@@ -4,18 +4,28 @@
  */
 package cli;
 
-/**
- *
- * @author jakk
- */
-public class CmEtudiantSupprimer extends Commande{
+import metier.Etudiant;
+
+public class CmEtudiantSupprimer extends Commande {
+
+    private int numeroCarte;
+
     @Override
     public void executer() {
-         
+        if (this.numeroCarte != 0) {
+
+            boolean supprime = Etudiant.supprimerEtudiant(this.numeroCarte);
+
+            if (supprime) {
+                System.out.println("Étudiant avec numéro de carte " + this.numeroCarte + " supprimé avec succès.");
+            } else {
+                System.out.println("Aucun étudiant trouvé avec le numéro de carte " + this.numeroCarte);
+            }
+        }
     }
 
     @Override
     public void setParametres(String[] parametres) {
+        this.numeroCarte = Integer.parseInt(parametres[0]);
     }
-    
 }

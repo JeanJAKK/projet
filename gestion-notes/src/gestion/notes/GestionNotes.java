@@ -43,7 +43,7 @@ public class GestionNotes {
 //        Etablissement epl = new Etablissement("EPL", "Ecole Polytechnique de Lomé");
 //        Etablissement fds = new Etablissement("FDS", "Faculté Des Sciences");
 //        
-        /*List<Parcours> pcrs = new ArrayList();
+        /*List<Parcours>pcrs = new ArrayList();
         pcrs.add(lproGL);
         pcrs.add(lproSRI);
         epl.setParcourss(pcrs);*/
