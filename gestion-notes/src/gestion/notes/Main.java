@@ -16,7 +16,7 @@ import metier.Parcours;
  *
  * @author jakk
  */
-public class GestionNotes {
+public class Main {
     private static Scanner clavier = new Scanner(System.in);
     private static ParseurCommande parseur = new ParseurCommande();
     /**

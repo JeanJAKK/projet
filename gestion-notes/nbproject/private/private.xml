@@ -3,8 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/metier/Etudiant.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/metier/Parcours.java</file>
             <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/ParseurCommande.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/CmEtudiantCreer.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/CmParcoursAfficher.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/CmParcoursCreer.java</file>
             <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/gestion/notes/GestionNotes.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/CmEtudiantSupprimer.java</file>
+            <file>file:/home/jakk/NetBeansProjects/gestion-notes/src/cli/CmEtudiantModifier.java</file>
         </group>
     </open-files>
 </project-private>
