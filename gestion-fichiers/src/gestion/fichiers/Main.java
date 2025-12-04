@@ -7,7 +7,7 @@ package gestion.fichiers;
 import gestion.fichiers.cli.Commande;
 import gestion.fichiers.cli.Navigateur;
 import gestion.fichiers.cli.ParseurCommande;
-import gestion.fichiers.metier.Repertoire;
+import gestion.fichier.metier.Repertoire;
 import java.util.Scanner;
 
 /**

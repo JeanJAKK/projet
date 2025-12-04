@@ -2,13 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gestion.fichiers.metier;
+package gestion.fichier.metier;
 
-import gestion.fichiers.cli.Commande;
-import gestion.fichiers.cli.ParseurCommande;
 import java.time.LocalDateTime;
-import java.util.Scanner;
-
 /**
  *
  * @author jakk
