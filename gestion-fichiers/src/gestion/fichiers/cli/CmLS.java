@@ -4,22 +4,60 @@
  */
 package gestion.fichiers.cli;
 
+import gestion.fichier.metier.Fichier;
+import gestion.fichier.metier.Repertoire;
+
 /**
  *
- * @author tkossi
+ * @author jakk
  */
 public class CmLS extends Commande {
-    //private String nom;
+    private String chemin;
+    private Repertoire repertoire;
 
     @Override
     public void executer() {
-        Navigateur.getInstance().getRepertoireCourant().afficherContenu();
-        System.out.println("");
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+        if (repertoire != null && chemin == null) {
+            try {
+                Navigateur.getInstance().getRepertoireCourant().afficherContenuR(repertoire);
+                System.out.println("");
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } else if (repertoire == null && chemin == null){
+            Navigateur.getInstance().getRepertoireCourant().afficherContenu();
+            System.out.println("");
+        } else {
+            try{
+                Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+                Navigateur.getInstance().changerRepertoire(chemin);
+                Navigateur.getInstance().getRepertoireCourant().afficherContenu();
+            }catch(Exception e){
+                System.err.println("Erreur : " + e.getMessage());
+            }
+        }
+        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+        
+        
+    }
+
+    
+    public void setParametres(String[] parametres) {
+        if (parametres.length > 0) {
+            try {
+                this.repertoire = Navigateur.getInstance().getRepertoireCourant(parametres[0]);
+            } catch (Exception e) {
+                this.chemin = parametres[0];
+            }
+        }
     }
 
     @Override
     public void setPararmetres(String[] parametres) {
-        //this.nom = parametres[0];
+        throw new UnsupportedOperationException("Not supported yet."); 
+     // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
      
 }

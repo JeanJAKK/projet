@@ -31,6 +31,18 @@ public class ParseurCommande {
             case "LS" :
                 commande = new CmLS();
                 break;
+            case "CD" :
+                commande = new CmCD();
+                break;
+            case "CP":
+                commande = new CmCP();
+                break;
+            case "MV" :
+                commande = new CmMV();
+                break;
+            case "RM" :
+                commande = new CmRM();
+                break;
             default :
                 commande = new CmInconnue();
         }
