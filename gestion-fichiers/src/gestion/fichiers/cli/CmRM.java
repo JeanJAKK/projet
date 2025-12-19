@@ -5,11 +5,8 @@
 package gestion.fichiers.cli;
 
 import gestion.fichier.metier.Fichier;
-import gestion.fichier.metier.FichierSimple;
 import gestion.fichier.metier.Repertoire;
-import gestion.fichiers.cli.Navigateur;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -23,41 +20,30 @@ public class CmRM extends Commande{
           // recuperer le repertoire de depart
         Repertoire RepertoireDepart = Navigateur.getInstance().getRepertoireCourant();
         
-//        String[] nomsRepertoire = RepertoireDepart.getNomComplet().split("/");
-//        String[] chemin = Arrays.copyOfRange(nomsRepertoire, 1, nomsRepertoire.length);
-        
-        for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            if (f.getNom().equals(nom)){
-                try{
-                   Navigateur.getInstance().getRepertoireCourant().getFichier().remove(f);
-                           
-    
-//                     // Aller au repertoire cible
-//                Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//                Navigateur.getInstance().changerRepertoire(this.chemin);
-//                
-//                Repertoire repertoireCible = Navigateur.getInstance().getRepertoireCourant();
-//                
-//                FichierSimple copie = new FichierSimple((FichierSimple)f);
-//                repertoireCible.ajouterFichierSimple(copie.getNom());
-                }catch(Exception e){
-                   e.getMessage();
-                }finally{
-                    Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
-                }       
-                break;
-             }
+        String[] nomsFichierARemove = nom.split("/"); //split le nom complet du fichier à remove
+       
+        for(var folder : nomsFichierARemove){ //va dans le dossier parent du fichier a remove
+            try{
+              Navigateur.getInstance().changerRepertoire(folder);  
+                List<Fichier> fichierARemoveParentContenu = Navigateur.getInstance().getRepertoireCourant().getFichier();
+                for(var f : fichierARemoveParentContenu){
+                    if(f.getNom().equals(nomsFichierARemove[nomsFichierARemove.length-1])){
+                        f.remove();
+                        break;
+                    }
+                }
+            }catch(Exception e){
+                System.err.println("Repertoire inexistant");
+            }finally{
+                Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
+            }
+            
+            
         }
     }
     @Override
     public void setPararmetres(String[] parametres) {
         this.nom = parametres[0];
-//        try{
-//            this.chemin = parametres[1];
-//        }catch(Exception e){
-//            System.out.println(e.getMessage());
-//        }
-        
     } 
     
 }
