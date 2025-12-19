@@ -35,7 +35,7 @@ public class CmMV extends Commande {
         for(var ch : chmin){
             Navigateur.getInstance().changerRepertoire(ch);
             for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            // Verifie si c'est un fichierSimple puis copie 
+            // Verifie si c'est un fichier puis copie 
                 if(f instanceof Fichier && this.nom.equals(f.getNom())){
                     try{
                             // Aller au repertoire cible

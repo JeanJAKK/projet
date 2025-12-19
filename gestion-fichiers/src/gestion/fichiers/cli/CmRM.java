@@ -33,7 +33,7 @@ public class CmRM extends Commande{
                     }
                 }
             }catch(Exception e){
-                System.err.println("Repertoire inexistant");
+                System.err.println("Repertoire inexistant" + e.getMessage());
             }finally{
                 Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
             }
