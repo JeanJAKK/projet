@@ -14,6 +14,10 @@ public class CmAide extends Commande {
     public void executer() {
         System.out.println("Exit : quitter le programme");
         System.out.println("Help : aide");
+        System.out.println("ls : ls <chemin> ou ls    \t[affiche le contenu d\'un repertoire]");
+        System.out.println("cp : cp <source> <cible> \t [copie]");
+        System.out.println("mv : mv <source> <cible> \t [move]");
+        System.out.println("rm : rm <fichier> \t\t [supprimer]");
     }
 
     @Override
