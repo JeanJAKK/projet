@@ -13,7 +13,12 @@ public class CmMKDIR extends Commande {
 
     @Override
     public void executer() {
-        Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
+        if(Navigateur.getInstance().getRepertoireCourant().existeRepertoire(nom)){
+            System.out.println("Ce repertoire exixste déjà ");
+        }else{
+            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
+        }
+        
     }
 
     @Override

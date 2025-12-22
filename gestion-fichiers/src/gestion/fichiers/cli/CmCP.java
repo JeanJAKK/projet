@@ -97,7 +97,7 @@ public class CmCP extends Commande {
         try{
             this.chemin = parametres[1];
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.err.println("Erreur:" + e.getMessage());
         }
         
     } 
