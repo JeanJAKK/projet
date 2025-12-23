@@ -4,15 +4,29 @@
  */
 package gestion.fichier.metier;
 
+import gestion.fichiers.cli.Navigateur;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+
 /**
  *
  * @author jakk
  */
-public abstract class Fichier {
+public abstract class Fichier implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 22222444444445L;
+    private static Repertoire root = new Repertoire("", null);
+    public static final String chemin = "/home/jakk/Bureau/CoursPOO/output/gestion_fichier.ser";
     private LocalDateTime dateCreation;
-    private String nom;
-    private Repertoire repertoireParent;
+    String nom;
+    Repertoire repertoireParent;
     
     
     public Fichier(){
@@ -22,14 +36,44 @@ public abstract class Fichier {
         this();
         this.nom = nom;
     }
-    public Fichier(String nom, Repertoire repertoireParent){
+       public Fichier(String nom, Repertoire repertoireParent){
         this(nom);
         this.repertoireParent = repertoireParent;
         if(repertoireParent != null){
             this.repertoireParent.getFichier().add(this);
         }
     }
+    
+     public static void sauvegarder() throws Exception{
+        FileOutputStream fichier = new FileOutputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier.ser");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fichier);
+        objectOutputStream.writeObject(root);
+        objectOutputStream.flush();
+    }
+    
+    public static void restaurer()throws Exception{
+        try{
+            FileInputStream fichier = new FileInputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier.ser");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fichier);
+            root = (Repertoire) objectInputStream.readObject();
+        }catch(FileNotFoundException e){
+            
+        }catch(IOException e){
+            
+        }catch(ClassNotFoundException e){
+            
+        }
+    }
+    
+    //
+    public abstract boolean estRepertoire();
+    
+    public static Repertoire getRoot(){
+        return root;
+    }
+    
     public abstract int getTaille();
+    
     public String getNomComplet(){
         if(repertoireParent == null){
             return this.nom;
@@ -37,7 +81,41 @@ public abstract class Fichier {
         return repertoireParent.getNomComplet() + "/" + this.nom;
     }
     
-   public String getNom(){
+    public String getNom(){
        return this.nom;
    } 
+    
+   public Repertoire getRepertoireParent(){
+       return this.repertoireParent;
+   }
+   
+   // copie method
+   public abstract void copie(String chemin);
+   
+   
+    // remover
+    public void remove() {
+        Navigateur.getInstance().getRepertoireCourant().getFichier().remove(this);
+    }
+    
+    public void remove(Repertoire repertoireDepart){
+        for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
+                if (f.getNom().equals(nom)){
+                    try{
+                       Navigateur.getInstance().getRepertoireCourant().getFichier().remove(f);
+
+
+   
+                    }catch(Exception e){
+                       e.getMessage();
+                    }finally{
+                       // Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
+                    }       
+                    break;
+                 }
+            }
+    }
+    
+    public abstract void move(String chemin);
+
 }

@@ -4,7 +4,9 @@
  */
 package gestion.fichier.metier;
 
-import java.lang.reflect.Array;
+import gestion.fichiers.cli.Navigateur;
+import java.io.FileNotFoundException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,26 +15,44 @@ import java.util.List;
  * @author jakk
  */
 public class Repertoire extends Fichier {
+
+    @Serial
+    private static final long serialVersionUID = 64234876235145L;
     private List<Fichier> fichiers = new ArrayList<>();
-    
+
     public Repertoire() {
-        
+
     }
-    
+
     public Repertoire(String nom, Repertoire repertoireParent) {
         super(nom, repertoireParent);
     }
-    
+
+    public Repertoire(Repertoire repertoire) {
+        this();
+        this.nom = repertoire.nom;
+        this.fichiers = repertoire.fichiers;
+        this.repertoireParent = repertoire.repertoireParent;
+
+    }
+
     public void ajouterRepertoire(String nom) {
         new Repertoire(nom, this);
     }
-    
+
     public void ajouterFichierSimple(String nom) {
         new FichierSimple(nom, this);
     }
-    
+
     public void afficherContenu() {
         for (Fichier fichier : fichiers) {
+            System.out.print(fichier.getNom() + "\t");
+        }
+    }
+
+    public void afficherContenuR(Repertoire getRepertoire) {
+        List<Fichier> files = getRepertoire.getFichier();
+        for (Fichier fichier : files) {
             System.out.print(fichier.getNom() + "\t");
         }
     }
@@ -43,11 +63,86 @@ public class Repertoire extends Fichier {
         for (Fichier fichier : fichiers) {
             taille += fichier.getTaille();
         }
-        return taille;                                                          
+        return taille;
     }
-    
+
+    @Override
+    public boolean estRepertoire() {
+        return true;
+    }
+
+    public boolean existeFichierSimple(String nom) {
+        if (nom == null) {
+            return false;
+        }
+        for (Fichier f : fichiers) {
+            if (!f.estRepertoire() && f.getNom().equals(nom)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existeRepertoire(String nom) {
+        if (nom == null) {
+            return false;
+        }
+        for (Fichier f : fichiers) {
+            if (f.estRepertoire() && f.getNom().equals(nom)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Repertoire getRepertoire(String nom) throws FileNotFoundException {
+        for (Fichier f : fichiers) {
+            if (f.estRepertoire() && f.getNom().equals(nom)) {
+                return (Repertoire) f;
+            }
+        }
+        throw new FileNotFoundException("Repertoire '" + nom + "' non trouvé");
+    }
+
     public List<Fichier> getFichier() {
         return this.fichiers;
     }
-    
+
+    @Override
+    public void copie(String chemin) {
+        // Recuperer le repertoire courant
+        Repertoire repertoire = Navigateur.getInstance().getRepertoireCourant();
+
+        try {
+            Navigateur.getInstance().changerRepertoire(chemin);
+            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
+
+            for (Fichier f : this.getFichier()) {
+                f.copie(chemin + "/" + this.getNom());
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur :" + e.getMessage());
+        }
+    }
+
+    // methode pour move 
+    @Override
+    public void move(String chemin) {
+        // Recuperer le repertoire courant
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+        try {
+            Navigateur.getInstance().changerRepertoire(chemin);
+            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
+            for (Fichier f : this.getFichier()) {
+                f.copie(chemin + "/" + this.getNom());
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur :" + e.getMessage());
+        } finally {
+            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+            Navigateur.getInstance().getRepertoireCourant().getFichier().remove(nom);
+        }
+
+    }
+
 }
