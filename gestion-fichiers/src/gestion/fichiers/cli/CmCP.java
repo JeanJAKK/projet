@@ -5,13 +5,7 @@
 package gestion.fichiers.cli;
 
 import gestion.fichier.metier.Fichier;
-import gestion.fichier.metier.FichierSimple;
 import gestion.fichier.metier.Repertoire;
-import gestion.fichiers.cli.Navigateur;
-import static gestion.fichiers.cli.Navigateur.getInstance;
-import java.io.FileNotFoundException;
-import java.nio.file.Files;
-import java.util.Arrays;
 
 
 
@@ -21,73 +15,23 @@ import java.util.Arrays;
  */
 public class CmCP extends Commande {
     
-    private String nom;
+    private String nom;       // nom du fichier à copier
     private String chemin;
     
     
    @Override
     public void executer() {
-        // recuperer le repertoire de depart
-        Repertoire RepertoireDepart = Navigateur.getInstance().getRepertoireCourant();
+        //recuperer le repertoire courant
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
         
-        String[] nomsRepertoire = RepertoireDepart.getNomComplet().split("/");
-        String[] chmin = Arrays.copyOfRange(nomsRepertoire, 1, nomsRepertoire.length);
-        for(var ch : chmin){
-            Navigateur.getInstance().changerRepertoire(ch);
-            for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            // Verifie si c'est un fichierSimple puis copie 
-                if(f instanceof FichierSimple && this.nom.equals(f.getNom())){
-                    try{
-                            // Aller au repertoire cible
-                       Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-                       Navigateur.getInstance().changerRepertoire(this.chemin);
-
-                       Repertoire repertoireCible = Navigateur.getInstance().getRepertoireCourant();
-
-                       FichierSimple copie = new FichierSimple((FichierSimple)f);
-                       repertoireCible.ajouterFichierSimple(copie.getNom());
-                       }catch(Exception e){
-                          e.getMessage();
-                       }finally{
-                           Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
-                       }
-               
-             // Si c'est un repertoire il entre dedans...
-            if (f instanceof Repertoire && this.nom.equals(f.getNom())){
-               // f.copie(chemin);
-                try{
-                            // Aller au repertoire cible
-                       Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-                       Navigateur.getInstance().changerRepertoire(this.chemin);
-
-                       Repertoire repertoireCible = Navigateur.getInstance().getRepertoireCourant();
-
-                       Repertoire copie = new Repertoire((Repertoire)f);
-                       
-                       repertoireCible.ajouterRepertoire(copie.getNom());
-                       Navigateur.getInstance().getRepertoireCourant().getFichier().add(f);
-                       }catch(Exception e){
-                          e.getMessage();
-                       }finally{
-                           Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
-                       }
+        for(Fichier f : Navigateur.getInstance().getRepertoireCourant().getFichier()){
+            if(f.getNom().equals(nom)){
+                f.copie(chemin);
             }
         }
-        }
-//            if(this.nom.equals(f.getNom())){
-//                try{
-//                    Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//                    Navigateur.getInstance().changerRepertoire(this.chemin);
-//                    Navigateur.getInstance().getRepertoireCourant().getFichier().add(f);
-//                    
-//                    Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//                    Navigateur.getInstance().changerRepertoire(path);
-//                    
-//                }catch(FileNotFoundException e){
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-        }
+
+        // REVENIR AU DEPART
+        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
     }
     
 

@@ -4,6 +4,7 @@
  */
 package gestion.fichiers.cli;
 
+import gestion.fichier.metier.Fichier;
 import gestion.fichier.metier.Repertoire;
 import java.io.FileNotFoundException;
 
@@ -38,6 +39,11 @@ public class Navigateur {
     
     public void changerRepertoire(String nom){
         if(nom == null){
+            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+            return;
+        }
+        if(".".equals(nom)){
+            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
             return;
         }
         
@@ -47,6 +53,7 @@ public class Navigateur {
            this.changerRepertoire(nomsRepertoire);    
         }catch(FileNotFoundException e){
             this.repertoireCourant = r;
+            System.err.println(e.getMessage());
         }
         
     }
@@ -57,8 +64,12 @@ public class Navigateur {
               this.repertoireCourant = this.repertoireCourant.getRepertoireParent();
               continue;
         }
-      
-        this.repertoireCourant = this.repertoireCourant.getRepertoire(nomRepertoire);
+            try {
+                this.repertoireCourant = this.repertoireCourant.getRepertoire(nomRepertoire);
+            } catch (FileNotFoundException e) {
+                System.err.println( e.getMessage());
+            }
+        
         }
     }
     

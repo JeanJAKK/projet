@@ -22,11 +22,11 @@ public class CmRM extends Commande{
         
         String[] nomsFichierARemove = nom.split("/"); //split le nom complet du fichier à remove
        
-        for(var folder : nomsFichierARemove){ //va dans le dossier parent du fichier a remove
+        for(String folder : nomsFichierARemove){ //va dans le dossier parent du fichier a remove
             try{
               Navigateur.getInstance().changerRepertoire(folder);  
                 List<Fichier> fichierARemoveParentContenu = Navigateur.getInstance().getRepertoireCourant().getFichier();
-                for(var f : fichierARemoveParentContenu){
+                for(Fichier f : fichierARemoveParentContenu){
                     if(f.getNom().equals(nomsFichierARemove[nomsFichierARemove.length-1])){
                         f.remove();
                         break;

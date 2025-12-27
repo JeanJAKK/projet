@@ -13,7 +13,12 @@ public class CmCD extends Commande {
     
     @Override
     public void executer() {
-        Navigateur.getInstance().changerRepertoire(nom);
+        try {
+             Navigateur.getInstance().changerRepertoire(nom);
+
+        } catch (Exception e) {
+            System.err.println("Erreur" + e.getMessage());
+        }
     }
 
     @Override

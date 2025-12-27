@@ -21,53 +21,23 @@ import java.util.Arrays;
  */
 public class CmMV extends Commande {
     
-    private String nom;
+    private String nom;       // nom du fichier à copier
     private String chemin;
     
     
    @Override
     public void executer() {
-        // recuperer le repertoire de depart
-        Repertoire RepertoireDepart = Navigateur.getInstance().getRepertoireCourant();
+        //recuperer le repertoire courant
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
         
-        String[] nomsRepertoire = RepertoireDepart.getNomComplet().split("/");
-        String[] chmin = Arrays.copyOfRange(nomsRepertoire, 1, nomsRepertoire.length);
-        for(var ch : chmin){
-            Navigateur.getInstance().changerRepertoire(ch);
-            for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            // Verifie si c'est un fichier puis copie 
-                if(f instanceof Fichier && this.nom.equals(f.getNom())){
-                    try{
-                            // Aller au repertoire cible
-                       Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-                       Navigateur.getInstance().changerRepertoire(this.chemin);
+        for(Fichier f : Navigateur.getInstance().getRepertoireCourant().getFichier()){
+            if(f.getNom().equals(nom)){
+                f.move(chemin);
+            }
+        }
 
-                       Repertoire repertoireCible = Navigateur.getInstance().getRepertoireCourant();
-
-                       FichierSimple copie = new FichierSimple((FichierSimple)f);
-                       repertoireCible.ajouterFichierSimple(copie.getNom());
-                       }catch(Exception e){
-                          e.getMessage();
-                       }finally{
-                           Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
-                           Navigateur.getInstance().getRepertoireCourant().getFichier().remove(f);
-                       }
-        }
-        }
-//            if(this.nom.equals(f.getNom())){
-//                try{
-//                    Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//                    Navigateur.getInstance().changerRepertoire(this.chemin);
-//                    Navigateur.getInstance().getRepertoireCourant().getFichier().add(f);
-//                    
-//                    Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//                    Navigateur.getInstance().changerRepertoire(path);
-//                    
-//                }catch(FileNotFoundException e){
-//                    System.out.println(e.getMessage());
-//                }
-//            }
-        }
+        // REVENIR AU DEPART
+        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
     }
     
 
@@ -77,8 +47,9 @@ public class CmMV extends Commande {
         try{
             this.chemin = parametres[1];
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.err.println("Erreur:" + e.getMessage());
         }
         
     } 
+    
 }
