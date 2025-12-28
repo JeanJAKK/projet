@@ -17,7 +17,7 @@ public class CmCD extends Commande {
              Navigateur.getInstance().changerRepertoire(nom);
 
         } catch (Exception e) {
-            System.err.println("Erreur" + e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 

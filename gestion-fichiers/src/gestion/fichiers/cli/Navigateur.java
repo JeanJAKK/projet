@@ -37,7 +37,7 @@ public class Navigateur {
         this.repertoireCourant = repertoireCourant;
     }
     
-    public void changerRepertoire(String nom){
+    public void changerRepertoire(String nom) throws FileNotFoundException{
         if(nom == null){
             Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
             return;
@@ -53,7 +53,7 @@ public class Navigateur {
            this.changerRepertoire(nomsRepertoire);    
         }catch(FileNotFoundException e){
             this.repertoireCourant = r;
-            System.err.println(e.getMessage());
+            throw e;
         }
         
     }
@@ -67,7 +67,8 @@ public class Navigateur {
             try {
                 this.repertoireCourant = this.repertoireCourant.getRepertoire(nomRepertoire);
             } catch (FileNotFoundException e) {
-                System.err.println( e.getMessage());
+               //System.err.println( e.getMessage());
+               throw e;
             }
         
         }

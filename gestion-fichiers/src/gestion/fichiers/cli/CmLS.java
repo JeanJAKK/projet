@@ -5,6 +5,7 @@
 package gestion.fichiers.cli;
 
 import gestion.fichier.metier.Repertoire;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -19,16 +20,16 @@ public class CmLS extends Commande {
         //recuperer le repertoire courant
         Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
 
-        if (chemin != null) {
+        if (chemin != null) { 
             try {
-                String[] cheminVersCible = chemin.split("/");
-                Navigateur.getInstance().changerRepertoire(cheminVersCible);
+                Navigateur.getInstance().changerRepertoire(chemin);
                 Navigateur.getInstance().getRepertoireCourant().afficherContenu();
-            } catch (Exception e) {
-
-                System.err.println(e.getMessage());
+            } catch (FileNotFoundException e) {
+                 System.err.println(e.getMessage());
             }
-        } else {
+               
+            
+        }if (chemin == null){
             try {
                 Navigateur.getInstance().getRepertoireCourant().afficherContenu();
                 
