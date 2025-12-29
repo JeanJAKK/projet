@@ -46,7 +46,7 @@ public abstract class Fichier implements Serializable{
     }
     
      public static void sauvegarder() throws Exception{
-        FileOutputStream fichier = new FileOutputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier.ser");
+        FileOutputStream fichier = new FileOutputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier_exam.ser");
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(fichier);
         objectOutputStream.writeObject(root);
         objectOutputStream.flush();
@@ -54,7 +54,7 @@ public abstract class Fichier implements Serializable{
     
     public static void restaurer()throws Exception{
         try{
-            FileInputStream fichier = new FileInputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier.ser");
+            FileInputStream fichier = new FileInputStream("/home/jakk/Bureau/CoursPOO/output/gestion_fichier_exam.ser");
             ObjectInputStream objectInputStream = new ObjectInputStream(fichier);
             root = (Repertoire) objectInputStream.readObject();
         }catch(FileNotFoundException e){
