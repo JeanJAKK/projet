@@ -91,11 +91,11 @@ public abstract class Fichier implements Serializable{
    }
    
    // copie method
-   public abstract void copie(String chemin);
+   public abstract void copie(String chemin) throws FileNotFoundException, FileAlreadyExistsException;
               
    public abstract void remove();
    
-   public void move(String chemin) throws FileNotFoundException, FileAlreadyExistsException, FileAlreadyExistsException{
+   public void move(String chemin) throws FileNotFoundException, FileAlreadyExistsException{
 
 
     Repertoire depart = Navigateur.getInstance().getRepertoireCourant();

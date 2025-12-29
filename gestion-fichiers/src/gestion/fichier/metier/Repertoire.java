@@ -7,6 +7,7 @@ package gestion.fichier.metier;
 import gestion.fichiers.cli.Navigateur;
 import java.io.FileNotFoundException;
 import java.io.Serial;
+import java.nio.file.FileAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +102,7 @@ public class Repertoire extends Fichier {
                 return (Repertoire) f;
             }
         }
-        throw new FileNotFoundException("Repertoire '" + nom + "' non trouvé");
+        return null;
     }
 
     public List<Fichier> getFichier() {
@@ -109,40 +110,50 @@ public class Repertoire extends Fichier {
     }
 
     @Override
-    public void copie(String chemin) {
-        // Recuperer le repertoire courant
-        Repertoire repertoire = Navigateur.getInstance().getRepertoireCourant();
+    public void copie(String chemin) throws FileNotFoundException, FileAlreadyExistsException {
+
+        Repertoire depart = Navigateur.getInstance().getRepertoireCourant();
 
         try {
-            Navigateur.getInstance().changerRepertoire(chemin);
-            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
+            // Déterminer la destination
+            Repertoire destination;
 
+            if (chemin == null) {
+                destination = depart;
+            } else {
+                Navigateur.getInstance().changerRepertoire(chemin);
+                destination = Navigateur.getInstance().getRepertoireCourant();
+                if (destination == null) {
+                    throw new FileNotFoundException("Destination inexistante");
+                }
+            }
+
+            // Vérifier conflit de nom
+            for (Fichier f : destination.getFichier()) {
+                if (f.getNom().equals(this.nom)) {
+                    throw new FileAlreadyExistsException(nom + " existe déjà ");
+                }
+            }
+
+            // Créer le nouveau répertoire (COPIE)
+            Repertoire copie = new Repertoire(this.nom, destination);
+
+            // Copier de maniere recursive le contenu
             for (Fichier f : this.getFichier()) {
-                f.copie(chemin + "/" + this.getNom());
+                if (f.estRepertoire()) {
+                    f.copie(copie.getNomComplet());
+                } else {
+                    // copie fichier simple
+                    new FichierSimple(f.getNom(), copie);
+                }
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Erreur :" + e.getMessage());
+
+        } finally {
+            Navigateur.getInstance().setRepertoireCourant(depart);
         }
     }
-    
-    public void copie() throws FileNotFoundException {
-        //recuperer le repertoire courant
-        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-        
-        Navigateur.getInstance().changerRepertoire(chemin); 
-       
-        for(Fichier f : Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            if(f.getNom().equals(nom)){
-                f.copie(chemin);
-            }
-        }
 
-        // REVENIR AU DEPART
-        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-    }
-
-    
-     // remover
+    // remover
     @Override
     public void remove() {
 
@@ -155,8 +166,8 @@ public class Repertoire extends Fichier {
         if (repertoireParent != null) {
             repertoireParent.getFichier().remove(this);
             repertoireParent = null;
+        }
     }
-}
 
 
 
