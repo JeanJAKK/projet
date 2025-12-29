@@ -31,7 +31,7 @@ public class Repertoire extends Fichier {
     public Repertoire(Repertoire repertoire) {
         this();
         this.nom = repertoire.nom;
-        this.fichiers = repertoire.fichiers;
+        this.fichiers = new ArrayList<>(repertoire.fichiers);
         this.repertoireParent = repertoire.repertoireParent;
 
     }
@@ -120,9 +120,25 @@ public class Repertoire extends Fichier {
             for (Fichier f : this.getFichier()) {
                 f.copie(chemin + "/" + this.getNom());
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             System.err.println("Erreur :" + e.getMessage());
         }
+    }
+    
+    public void copie() throws FileNotFoundException {
+        //recuperer le repertoire courant
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+        
+        Navigateur.getInstance().changerRepertoire(chemin); 
+       
+        for(Fichier f : Navigateur.getInstance().getRepertoireCourant().getFichier()){
+            if(f.getNom().equals(nom)){
+                f.copie(chemin);
+            }
+        }
+
+        // REVENIR AU DEPART
+        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
     }
 
     // methode pour move 
@@ -137,12 +153,31 @@ public class Repertoire extends Fichier {
                 f.copie(chemin + "/" + this.getNom());
             }
         } catch (Exception e) {
-            System.err.println("Erreur :" + e.getMessage());
+            System.err.println("Erreur : " + e.getMessage());
         } finally {
             Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-            Navigateur.getInstance().getRepertoireCourant().getFichier().remove(nom);
+            this.remove();
         }
 
     }
+
+    
+     // remover
+    @Override
+    public void remove() {
+
+        // supprimer le contenu (copie OBLIGATOIRE)
+        for (Fichier f : new ArrayList<>(getFichier())) {
+            f.remove();
+        }
+
+        // se supprimer du parent
+        if (repertoireParent != null) {
+            repertoireParent.getFichier().remove(this);
+            repertoireParent = null;
+    }
+}
+
+
 
 }

@@ -5,8 +5,8 @@
 package gestion.fichier.metier;
 
 import gestion.fichiers.cli.Navigateur;
+import java.io.FileNotFoundException;
 import java.io.Serial;
-import java.util.Arrays;
 
 /**
  *
@@ -39,15 +39,6 @@ public class FichierSimple extends Fichier{
         return donnee.length();
     }
     
-    @Override
-     public void copie(String chemin) {
-       // Recuperer le repertoire courant
-       Repertoire repertoire = Navigateur.getInstance().getRepertoireCourant();
-       
-       Navigateur.getInstance().changerRepertoire(chemin);
-       Navigateur.getInstance().getRepertoireCourant().ajouterFichierSimple(nom);
-       
-    }
     
     @Override
     public boolean estRepertoire(){
@@ -60,16 +51,66 @@ public class FichierSimple extends Fichier{
     public void move(String chemin) {
        // Recuperer le repertoire courant
        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-       try{
+  
+        try {
+            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
             Navigateur.getInstance().changerRepertoire(chemin);
-            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
-       }catch(Exception e){
-           System.err.println("Erreur :" + e.getMessage());
-       }finally{
-           Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-           Navigateur.getInstance().getRepertoireCourant().getFichier().remove(nom);
-       }
-       
+            
+            Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
+            
+                if (this.repertoireParent != null){
+                    for (Fichier f : this.repertoireParent.getFichier()){
+                        if(this.getNom().equals(f.getNom()))
+                          this.remove(); 
+            }
+           
+            }
+            
+            destination.getFichier().add(this);
+            this.repertoireParent = destination;
+            
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+        }
      }
+    
+    @Override
+    public void copie(String chemin) {
+       // Recuperer le repertoire courant
+       Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+  
+        try {
+            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+            Navigateur.getInstance().changerRepertoire(chemin);
+            
+            Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
+            
+//            if (this.repertoireParent != null){
+//                this.repertoireParent.getFichier().remove(this);
+//            }
+            
+            destination.getFichier().add(this);
+            this.repertoireParent = destination;
+            
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+        }
+     }
+    
+        @Override
+    public void remove() {
+        if (repertoireParent == null){
+            return;
+        }
+
+        repertoireParent.getFichier().remove(this);
+        repertoireParent = null;
+}
+
+
 }
 

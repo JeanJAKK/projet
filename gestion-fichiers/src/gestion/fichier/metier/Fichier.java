@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -92,30 +93,9 @@ public abstract class Fichier implements Serializable{
    // copie method
    public abstract void copie(String chemin);
    
-   
-    // remover
-    public void remove() {
-        Navigateur.getInstance().getRepertoireCourant().getFichier().remove(this);
-    }
-    
-    public void remove(Repertoire repertoireDepart){
-        for(Fichier f: Navigateur.getInstance().getRepertoireCourant().getFichier()){
-                if (f.getNom().equals(nom)){
-                    try{
-                       Navigateur.getInstance().getRepertoireCourant().getFichier().remove(f);
-
-
-   
-                    }catch(Exception e){
-                       e.getMessage();
-                    }finally{
-                       // Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
-                    }       
-                    break;
-                 }
-            }
-    }
+           
     
     public abstract void move(String chemin);
+    public abstract void remove();
 
 }
