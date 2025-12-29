@@ -46,35 +46,35 @@ public class FichierSimple extends Fichier{
     }
     
     
-    // methode pour move 
-    @Override
-    public void move(String chemin) {
-       // Recuperer le repertoire courant
-       Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-  
-        try {
-            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-            Navigateur.getInstance().changerRepertoire(chemin);
-            
-            Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
-            
-                if (this.repertoireParent != null){
-                    for (Fichier f : this.repertoireParent.getFichier()){
-                        if(this.getNom().equals(f.getNom()))
-                          this.remove(); 
-            }
-           
-            }
-            
-            destination.getFichier().add(this);
-            this.repertoireParent = destination;
-            
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        } finally {
-            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-        }
-     }
+//    // methode pour move 
+//    @Override
+//    public void move(String chemin) {
+//       // Recuperer le repertoire courant
+//       Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+//  
+//        try {
+//            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+//            Navigateur.getInstance().changerRepertoire(chemin);
+//            
+//            Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
+//            
+//                if (this.repertoireParent != null){
+//                    for (Fichier f : this.repertoireParent.getFichier()){
+//                        if(this.getNom().equals(f.getNom()))
+//                          this.remove(); 
+//            }
+//           
+//            }
+//            
+//            destination.getFichier().add(this);
+//            this.repertoireParent = destination;
+//            
+//        } catch (FileNotFoundException e) {
+//            System.err.println(e.getMessage());
+//        } finally {
+//            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+//        }
+//     }
     
     @Override
     public void copie(String chemin) {
@@ -101,7 +101,7 @@ public class FichierSimple extends Fichier{
         }
      }
     
-        @Override
+    @Override
     public void remove() {
         if (repertoireParent == null){
             return;

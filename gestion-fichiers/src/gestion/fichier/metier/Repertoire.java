@@ -141,32 +141,12 @@ public class Repertoire extends Fichier {
         Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
     }
 
-    // methode pour move 
-    @Override
-    public void move(String chemin) {
-        // Recuperer le repertoire courant
-        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-        try {
-            Navigateur.getInstance().changerRepertoire(chemin);
-            Navigateur.getInstance().getRepertoireCourant().ajouterRepertoire(nom);
-            for (Fichier f : this.getFichier()) {
-                f.copie(chemin + "/" + this.getNom());
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur : " + e.getMessage());
-        } finally {
-            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-            this.remove();
-        }
-
-    }
-
     
      // remover
     @Override
     public void remove() {
 
-        // supprimer le contenu (copie OBLIGATOIRE)
+        // supprimer le contenu
         for (Fichier f : new ArrayList<>(getFichier())) {
             f.remove();
         }

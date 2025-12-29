@@ -7,14 +7,15 @@ package gestion.fichiers;
 import gestion.fichiers.cli.Commande;
 import gestion.fichiers.cli.Navigateur;
 import gestion.fichiers.cli.ParseurCommande;
-import gestion.fichier.metier.Repertoire;
+import gestion.fichier.metier.Fichier;
 import java.util.Scanner;
 
 /**
  *
- * @author jakk
+ * @author tkossi
  */
 public class Main {
+
     private static Scanner clavier = new Scanner(System.in);
     private static ParseurCommande parseur = new ParseurCommande();
 
@@ -23,20 +24,23 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Bonjour !!!");
-        System.out.println("Tapez votre commande :");
-        Repertoire root = new Repertoire("/", null);
-        Navigateur.getInstance().setRepertoireCourant(root);
-        while (true) { 
-            String chemin = "jakk@jakk-Latitude-5480:~$"
+        System.out.println("\nBonjour !!! Que le code soit... ");
+        System.out.println("\nTaper votre commande : ");
+        try {
+            Fichier.restaurer();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
+        while (true) {
+            String chemin = "\njakk@jakk-Latitude-5480:~"
                     + Navigateur.getInstance().getRepertoireCourant().getNomComplet()
                     + "$ ";
-            System.out.println("chemin");
+            System.out.print(chemin);
             String strCmde = clavier.nextLine();
             Commande commande = parseur.parser(strCmde);
             commande.executer();
         }
-        
     }
-    
+
 }

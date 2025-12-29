@@ -5,13 +5,9 @@
 package gestion.fichiers.cli;
 
 import gestion.fichier.metier.Fichier;
-import gestion.fichier.metier.FichierSimple;
+import java.nio.file.FileAlreadyExistsException;
 import gestion.fichier.metier.Repertoire;
-import gestion.fichiers.cli.Navigateur;
-import static gestion.fichiers.cli.Navigateur.getInstance;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
-import java.util.Arrays;
 
 
 
@@ -19,37 +15,63 @@ import java.util.Arrays;
  *
  * @author jakk
  */
+
 public class CmMV extends Commande {
-    
-    private String nom;       // nom du fichier à copier
-    private String chemin;
-    
-    
-   @Override
+
+    private String source;
+    private String destination;
+    String cheminDestination;
+
+    @Override
     public void executer() {
-        //recuperer le repertoire courant
+
         Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-        
-        for(Fichier f : Navigateur.getInstance().getRepertoireCourant().getFichier()){
-            if(f.getNom().equals(nom)){
-                f.move(chemin);
+
+        Fichier cible = null;
+
+        // Trouver la source dans le répertoire courant
+        for (Fichier f : repertoireCourant.getFichier()) {
+            if (f.getNom().equals(source)) {
+                cible = f;
+                break;
             }
         }
 
-        // REVENIR AU DEPART
-        Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
+        if (cible == null) {
+            System.err.println("Source introuvable : " + source);
+            return;
+        }
+        
+        
+        if (destination == null) {
+            // répertoire courant
+            cheminDestination = repertoireCourant.getNomComplet();
+        } else {
+            cheminDestination = destination;
+        }
+        
+        // Déplacer
+        try {
+            cible.move(cheminDestination);
+        } catch (FileNotFoundException e) {
+            System.err.println("Destination introuvable : " + e.getMessage());
+        } catch (FileAlreadyExistsException e) {
+            System.err.println(e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erreur : " + e.getMessage());
+        }
+   
+        
     }
-    
 
     @Override
     public void setPararmetres(String[] parametres) {
-        this.nom = parametres[0];
-        try{
-            this.chemin = parametres[1];
-        }catch(Exception e){
-            System.err.println("Erreur:" + e.getMessage());
+         if (parametres.length < 2) {
+            this.source = parametres[0];
+            this.destination = null;
+        }else{
+            this.source = parametres[0];
+            this.destination = parametres[1];
         }
-        
-    } 
-    
+    }
 }

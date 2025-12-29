@@ -13,8 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.file.FileAlreadyExistsException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  *
@@ -92,10 +92,36 @@ public abstract class Fichier implements Serializable{
    
    // copie method
    public abstract void copie(String chemin);
+              
+   public abstract void remove();
    
-           
+   public void move(String chemin) throws FileNotFoundException, FileAlreadyExistsException, FileAlreadyExistsException{
+
+
+    Repertoire depart = Navigateur.getInstance().getRepertoireCourant();
+
+    // Aller à la destination
+    Navigateur.getInstance().changerRepertoire(chemin);
+    Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
     
-    public abstract void move(String chemin);
-    public abstract void remove();
+    if (destination == null) {
+        throw new FileNotFoundException("Répertoire destination inexistant");
+    }
+    
+    // Vérifier conflit de nom
+    for (Fichier f : destination.getFichier()) {
+        if (f.getNom().equals(this.nom)) {
+            throw new FileAlreadyExistsException( nom + " existe déjà" );
+        }
+    }
+    
+    // move
+    this.repertoireParent.getFichier().remove(this);
+    destination.getFichier().add(this);
+    this.repertoireParent = destination;
+
+    // repertoire de départ
+    Navigateur.getInstance().setRepertoireCourant(depart);
+}
 
 }

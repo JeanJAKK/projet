@@ -6,7 +6,6 @@ package gestion.fichiers.cli;
 
 import gestion.fichier.metier.Fichier;
 import gestion.fichier.metier.Repertoire;
-import java.util.List;
 
 /**
  *
@@ -15,32 +14,27 @@ import java.util.List;
 public class CmRM extends Commande{
     private String nom;
     
-   @Override
-    public void executer() {
-          // recuperer le repertoire de depart
-        Repertoire RepertoireDepart = Navigateur.getInstance().getRepertoireCourant();
-        
-        String[] nomsFichierARemove = nom.split("/"); //split le nom complet du fichier à remove
-       
-        for(String folder : nomsFichierARemove){ //va dans le dossier parent du fichier a remove
-            try{
-              Navigateur.getInstance().changerRepertoire(folder);  
-                List<Fichier> fichierARemoveParentContenu = Navigateur.getInstance().getRepertoireCourant().getFichier();
-                for(Fichier f : fichierARemoveParentContenu){
-                    if(f.getNom().equals(nomsFichierARemove[nomsFichierARemove.length-1])){
-                        f.remove();
-                        break;
-                    }
-                }
-            }catch(Exception e){
-                System.err.println("Repertoire inexistant" + e.getMessage());
-            }finally{
-                Navigateur.getInstance().setRepertoireCourant(RepertoireDepart);
+  @Override
+   public void executer() {
+        Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
+
+        Fichier cible = null;
+
+        for (Fichier f : repertoireCourant.getFichier()) {
+            if (f.getNom().equals(nom)) {
+                cible = f;
+                break;
             }
-            
-            
         }
-    }
+
+        if (cible == null) {
+            System.err.println("Fichier ou répertoire introuvable : " + nom);
+            return;
+        }
+
+        cible.remove(); 
+}
+
     @Override
     public void setPararmetres(String[] parametres) {
         this.nom = parametres[0];
