@@ -47,36 +47,6 @@ public class FichierSimple extends Fichier{
     }
     
    
-//    public void copie(String chemin) {
-//       // Recuperer le repertoire courant
-//       Repertoire repertoireCourant = Navigateur.getInstance().getRepertoireCourant();
-//  
-//        try {
-//            Navigateur.getInstance().setRepertoireCourant(Fichier.getRoot());
-//            Navigateur.getInstance().changerRepertoire(chemin);
-//            
-//            Repertoire destination = Navigateur.getInstance().getRepertoireCourant();
-//            
-//            // Vérifier conflit de nom
-//            for (Fichier f : destination.getFichier()) {
-//                if (f.getNom().equals(this.nom)) {
-//                    System.err.println( "\'" + this.nom + "\'" + " existe déjà" );
-//                    throw new FileAlreadyExistsException("Erreur" + this.nom);
-//                }
-//            }
-//            
-//            destination.getFichier().add(this);
-//            this.repertoireParent = destination;
-//    
-//        } catch (FileNotFoundException e) {
-//            System.err.println(e.getMessage());
-//        } catch (FileAlreadyExistsException ex) {
-//            ex.getMessage();
-//        } finally {
-//            Navigateur.getInstance().setRepertoireCourant(repertoireCourant);
-//        }
-//     }
-//    
     @Override
     public void copie(String chemin)
         throws FileNotFoundException, FileAlreadyExistsException {

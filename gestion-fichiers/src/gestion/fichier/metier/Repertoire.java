@@ -115,7 +115,7 @@ public class Repertoire extends Fichier {
         Repertoire depart = Navigateur.getInstance().getRepertoireCourant();
 
         try {
-            // Déterminer la destination
+            // la destination
             Repertoire destination;
 
             if (chemin == null) {
@@ -135,16 +135,16 @@ public class Repertoire extends Fichier {
                 }
             }
 
-            // Créer le nouveau répertoire (COPIE)
-            Repertoire copie = new Repertoire(this.nom, destination);
+            // Créer le nouveau répertoire, copie  quoii
+            Repertoire repCopie = new Repertoire(this.nom, destination);
 
             // Copier de maniere recursive le contenu
             for (Fichier f : this.getFichier()) {
                 if (f.estRepertoire()) {
-                    f.copie(copie.getNomComplet());
+                    f.copie(repCopie.getNomComplet());
                 } else {
                     // copie fichier simple
-                    new FichierSimple(f.getNom(), copie);
+                    new FichierSimple(f.getNom(), repCopie);
                 }
             }
 
